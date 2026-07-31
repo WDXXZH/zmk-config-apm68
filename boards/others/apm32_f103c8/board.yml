@@ -1,0 +1,7 @@
+board:
+  name: apm32_f103c8
+  vendor: others
+  socs:
+  - name: stm32f103xb
+    variants:
+    - name: zmk

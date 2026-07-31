@@ -1,0 +1,4 @@
+name: zmk-component-apm32-f103c8
+build:
+  settings:
+    board_root: .

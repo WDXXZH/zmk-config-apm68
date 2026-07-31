@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: MIT
+
+config BOARD_APM32_F103C8
+	select SOC_STM32F103XB
