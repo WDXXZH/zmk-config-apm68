@@ -63,9 +63,9 @@
         status = "okay";
     };
 
-    ext_power: ext_power {
+    rgb_pwr: rgb_pwr {
         compatible = "zmk,ext-power-generic";
-        label = "EXT_POWER";
+        label = "RGB_EXT_POWER";
         control-gpios = <&gpioa 0 GPIO_ACTIVE_HIGH>;
         status = "okay";
     };
