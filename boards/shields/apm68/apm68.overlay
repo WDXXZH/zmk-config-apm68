@@ -1,5 +1,4 @@
 #include <dt-bindings/zmk/matrix_transform.h>
-#include <dt-bindings/led/led.h>
 #include "apm68-layouts.dtsi"
 
 / {
@@ -7,7 +6,6 @@
         zmk,kscan = &kscan0;
         zmk,matrix-transform = &default_transform;
         zmk,physical-layout = &apm68_layout;
-        zmk,underglow = &led_strip;
         zmk,sensors = <&encoder_0>;
     };
 
@@ -60,14 +58,6 @@
         a-gpios = <&gpiob 12 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         b-gpios = <&gpiob 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         resolution = <4>;
-        status = "okay";
-    };
-
-    led_strip: ws2812 {
-        compatible = "worldsemi,ws2812-gpio";
-        chain-length = <68>;
-        color-mapping = <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>;
-        gpios = <&gpiob 14 GPIO_ACTIVE_HIGH>;
         status = "okay";
     };
 };
