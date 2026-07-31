@@ -63,13 +63,6 @@
         status = "okay";
     };
 
-    rgb_pwr: rgb_pwr {
-        compatible = "zmk,ext-power-generic";
-        label = "RGB_EXT_POWER";
-        control-gpios = <&gpioa 0 GPIO_ACTIVE_HIGH>;
-        status = "okay";
-    };
-
     led_strip: ws2812 {
         compatible = "worldsemi,ws2812-gpio";
         chain-length = <68>;
