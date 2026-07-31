@@ -3,5 +3,3 @@ board:
   vendor: others
   socs:
   - name: stm32f103xb
-    variants:
-    - name: zmk
