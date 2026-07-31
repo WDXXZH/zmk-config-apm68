@@ -1,0 +1,4 @@
+# 临时构建目标：如果 ZMK 上游没有 bluepill_f103c8，需要先补板级支持。
+include:
+  - board: bluepill_f103c8
+    shield: apm68

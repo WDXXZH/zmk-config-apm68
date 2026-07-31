@@ -1,0 +1,6 @@
+if SHIELD_APM68
+
+config ZMK_KEYBOARD_NAME
+    default "APM68"
+
+endif
