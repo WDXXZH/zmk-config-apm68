@@ -28,10 +28,5 @@ CONFIG_FLASH_MAP=y
 CONFIG_NVS=y
 CONFIG_SETTINGS=y
 
-# Serial console (for debugging)
-CONFIG_SERIAL=y
-CONFIG_CONSOLE=y
-CONFIG_UART_CONSOLE=y
-
 # Pin controller
 CONFIG_PINCTRL=y

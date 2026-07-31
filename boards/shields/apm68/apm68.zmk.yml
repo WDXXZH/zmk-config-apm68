@@ -4,7 +4,7 @@ name: APM68
 type: shield
 url: https://github.com/WDXXZH/zmk-config-apm68
 requires:
-  - bluepill_f103c8
+  - apm32_f103c8
 features:
   - keys
   - encoder

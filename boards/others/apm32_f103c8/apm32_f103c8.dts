@@ -14,8 +14,6 @@
 	compatible = "others,apm32_f103c8", "st,stm32f103xb";
 
 	chosen {
-		zephyr,console = &usart1;
-		zephyr,shell-uart = &usart1;
 		zephyr,sram = &sram0;
 		zephyr,flash = &flash0;
 		zephyr,code-partition = &code_partition;
@@ -53,11 +51,9 @@
 	apb2-prescaler = <1>;
 };
 
+/* USART1 disabled: PA9/PA10 are used for matrix rows */
 &usart1 {
-	status = "okay";
-	current-speed = <115200>;
-	pinctrl-0 = <&usart1_tx_pa9 &usart1_rx_pa10>;
-	pinctrl-names = "default";
+	status = "disabled";
 };
 
 &usb {

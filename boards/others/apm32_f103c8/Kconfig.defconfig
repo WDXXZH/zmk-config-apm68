@@ -5,4 +5,7 @@ if BOARD_APM32_F103C8
 config BOARD
 	default "apm32_f103c8"
 
+config ZMK_BOARD_COMPAT
+	default y
+
 endif # BOARD_APM32_F103C8
