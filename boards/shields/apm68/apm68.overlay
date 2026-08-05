@@ -4,9 +4,7 @@
 / {
     chosen {
         zmk,kscan = &kscan0;
-        zmk,matrix-transform = &default_transform;
         zmk,physical-layout = &apm68_layout;
-        zmk,sensors = <&encoder_0>;
     };
 
     kscan0: kscan {
@@ -59,5 +57,11 @@
         b-gpios = <&gpiob 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         resolution = <4>;
         status = "okay";
+    };
+
+    sensors: sensors {
+        compatible = "zmk,keymap-sensors";
+        sensors = <&encoder_0>;
+        triggers-per-rotation = <20>;
     };
 };

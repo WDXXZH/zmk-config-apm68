@@ -1,3 +1,7 @@
+# ZMK west 清单
+# - revision: main 表示跟踪 ZMK 主分支(包含最新的 STM32F1 支持)
+# - 如需更稳定,可改为固定版本: revision: v0.3.0
+#   注意: v0.3.0 使用 Zephyr v3.5.0,STM32F1 支持同样存在。
 manifest:
   remotes:
     - name: zmkfirmware
