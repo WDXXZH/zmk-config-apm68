@@ -62,6 +62,7 @@ static inline void delay_cycles(uint32_t cycles)
 {
     uint32_t start = DWT_CYCCNT;
     while ((DWT_CYCCNT - start) < cycles) {
+        __asm volatile("" ::: "memory");
     }
 }
 static int send_buf(const struct device *dev, uint8_t *buf, size_t len)

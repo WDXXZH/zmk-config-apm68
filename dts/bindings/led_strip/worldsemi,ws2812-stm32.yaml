@@ -8,8 +8,6 @@ description: |
 
 compatible: "worldsemi,ws2812-stm32"
 
-include: led-strip.yaml
-
 properties:
   gpios:
     type: phandle-array
@@ -17,6 +15,23 @@ properties:
     description: |
       GPIO phandle and specifier for the pin connected to the
       LED strip data line. Exactly one pin should be given.
+
+  chain-length:
+    type: int
+    required: true
+    description: |
+      The number of devices in the daisy-chain.
+
+  color-mapping:
+    type: array
+    required: true
+    description: |
+      Channel to color mapping (or pixel order).
+      For example a GRB channel to color mapping would be:
+      color-mapping = <LED_COLOR_ID_GREEN
+                       LED_COLOR_ID_RED
+                       LED_COLOR_ID_BLUE>;
+
   reset-delay:
     type: int
     default: 50
