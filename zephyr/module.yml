@@ -1,4 +1,7 @@
 name: zmk-component-apm32-f103c8
 build:
+  cmake: .
+  kconfig: Kconfig
   settings:
     board_root: .
+    dts_root: .

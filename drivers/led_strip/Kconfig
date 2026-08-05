@@ -1,0 +1,10 @@
+# Copyright (c) 2024 APM68 Keyboard
+# SPDX-License-Identifier: MIT
+
+config LED_STRIP_WS2812_STM32
+	bool "WS2812 LED strip driver for STM32 (GPIO bit-bang)"
+	depends on DT_HAS_WORLDSEMI_WS2812_STM32_ENABLED
+	depends on GPIO
+	help
+	  Enable the WS2812 bit-bang LED strip driver for STM32/APM32
+	  devices. Uses the DWT cycle counter for timing on Cortex-M.

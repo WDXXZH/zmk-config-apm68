@@ -3,6 +3,14 @@
 #include <dt-bindings/zmk/rgb.h>
 
 / {
+    behaviors {
+        rgb_encoder: rgb_encoder {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&rgb_ug RGB_BRI>, <&rgb_ug RGB_BRD>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
@@ -29,7 +37,7 @@
 &trans           &trans     &trans  &trans  &trans                  &trans          &trans  &trans           &rgb_ug RGB_EFR  &rgb_ug RGB_SAD  &rgb_ug RGB_EFF
             >;
 
-            sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP>;
+            sensor-bindings = <&rgb_encoder>;
         };
     };
 };

@@ -5,6 +5,7 @@
     chosen {
         zmk,kscan = &kscan0;
         zmk,physical-layout = &apm68_layout;
+        zmk,underglow = &ws2812_0;
     };
 
     kscan0: kscan {
@@ -57,6 +58,14 @@
         b-gpios = <&gpiob 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         resolution = <4>;
         status = "okay";
+    };
+
+    ws2812_0: ws2812_0 {
+        compatible = "worldsemi,ws2812-stm32";
+        gpios = <&gpiob 14 GPIO_ACTIVE_HIGH>;
+        chain-length = <68>;
+        color-mapping = <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>;
+        reset-delay = <50>;
     };
 
     sensors: sensors {

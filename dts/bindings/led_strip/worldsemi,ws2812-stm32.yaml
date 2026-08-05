@@ -1,0 +1,25 @@
+# Copyright (c) 2024 APM68 Keyboard
+# SPDX-License-Identifier: MIT
+
+description: |
+  Worldsemi WS2812 LED strip, STM32 GPIO bit-bang driver.
+  Custom driver for STM32F103/APM32F103 that bit-bangs the WS2812
+  protocol on a GPIO using the DWT cycle counter for timing.
+
+compatible: "worldsemi,ws2812-stm32"
+
+include: led-strip.yaml
+
+properties:
+  gpios:
+    type: phandle-array
+    required: true
+    description: |
+      GPIO phandle and specifier for the pin connected to the
+      LED strip data line. Exactly one pin should be given.
+  reset-delay:
+    type: int
+    default: 50
+    description: |
+      Minimum delay to wait (in microseconds) to make sure that the
+      strip has latched the signal.
