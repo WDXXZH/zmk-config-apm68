@@ -68,6 +68,15 @@ jobs:
           echo "west build exit code: ${exit_code}"
           cp "${{ env.build_dir }}/zephyr/.config" "${{ env.build_dir }}/" 2>/dev/null || true
           cp "${{ env.build_dir }}/zephyr/zephyr.dts.pre" "${{ env.build_dir }}/" 2>/dev/null || true
+          # ---- Dump full build log tail into the step summary (visible on run page) ----
+          echo "## West Build output (full log follows)" >> "$GITHUB_STEP_SUMMARY"
+          echo '```text' >> "$GITHUB_STEP_SUMMARY"
+          tail -n 300 "${{ env.build_dir }}/build.log" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          # ---- Emit error lines as annotations (visible in the Annotations box) ----
+          grep -n -E "error:|Error|ERROR|fatal|FAILED|undefined|undeclared|not found|No such|does not|missing|Cannot|Can't" "${{ env.build_dir }}/build.log" | head -60 | while IFS= read -r l; do
+            echo "::error::$l"
+          done
           exit ${exit_code}
 
       - name: Upload diagnostic logs
