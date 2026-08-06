@@ -21,22 +21,38 @@ jobs:
           echo "build_dir=$(mktemp -d)" >> $GITHUB_ENV
 
       - name: Prepare variables
-        shell: bash -x {0}
+        shell: sh -x {0}
         run: |
-          export zmk_load_arg=" -DZMK_EXTRA_MODULES='${GITHUB_WORKSPACE}'"
-          new_tmp_dir="${TMPDIR:-/tmp}/zmk-config"
-          mkdir -p "${new_tmp_dir}"
-          echo "base_dir=${new_tmp_dir}" >> $GITHUB_ENV
-          cp -R config/* "${new_tmp_dir}/config/"
+          if [ -e zephyr/module.yml ]; then
+            export zmk_load_arg=" -DZMK_EXTRA_MODULES='${GITHUB_WORKSPACE}'"
+            new_tmp_dir="${TMPDIR:-/tmp}/zmk-config"
+            mkdir -p "${new_tmp_dir}"
+            echo "base_dir=${new_tmp_dir}" >> $GITHUB_ENV
+          else
+            echo "base_dir=${GITHUB_WORKSPACE}" >> $GITHUB_ENV
+          fi
           echo "extra_cmake_args=${shield:+-DSHIELD=\"$shield\"}${zmk_load_arg}" >> $GITHUB_ENV
+
+      - name: Copy config files to isolated temporary directory
+        run: |
+          if [ "${{ env.base_dir }}" != "${GITHUB_WORKSPACE}" ]; then
+            mkdir "${{ env.base_dir }}/config"
+            cp -R config/* "${{ env.base_dir }}/config/"
+          fi
 
       - name: West Init
         working-directory: ${{ env.base_dir }}
-        run: west init -l "${base_dir}/config"
+        run: west init -l "${{ env.base_dir }}/config"
 
       - name: West Update
         working-directory: ${{ env.base_dir }}
         run: west update --fetch-opt=--filter=tree:0
+
+      - name: Check ZMK revision
+        working-directory: ${{ env.base_dir }}
+        run: |
+          zmk_revision=$(west list -f "{revision}" zmk)
+          echo "ZMK revision: ${zmk_revision}"
 
       - name: West Zephyr export
         working-directory: ${{ env.base_dir }}
@@ -47,11 +63,11 @@ jobs:
         shell: sh -x {0}
         run: |
           set +e
-          west build -s zmk/app -d "${build_dir}" -b "${board}" -- -DZMK_CONFIG="${base_dir}/config" ${extra_cmake_args} > "${build_dir}/build.log" 2>&1
+          west build -s zmk/app -d "${{ env.build_dir }}" -b "${{ env.board }}" -- -DZMK_CONFIG=${{ env.base_dir }}/config ${{ env.extra_cmake_args }} > "${{ env.build_dir }}/build.log" 2>&1
           exit_code=$?
           echo "west build exit code: ${exit_code}"
-          cp "${build_dir}/zephyr/.config" "${build_dir}/" 2>/dev/null || true
-          cp "${build_dir}/zephyr/zephyr.dts.pre" "${build_dir}/" 2>/dev/null || true
+          cp "${{ env.build_dir }}/zephyr/.config" "${{ env.build_dir }}/" 2>/dev/null || true
+          cp "${{ env.build_dir }}/zephyr/zephyr.dts.pre" "${{ env.build_dir }}/" 2>/dev/null || true
           exit ${exit_code}
 
       - name: Upload diagnostic logs
