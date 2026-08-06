@@ -1,0 +1,62 @@
+name: ZMK Diagnostic Build
+on:
+  push:
+    branches: [diagnose]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: zmkfirmware/zmk-build-arm:stable
+    env:
+      board: apm32_f103c8
+      shield: apm68
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Create build directory
+        run: |
+          echo "build_dir=$(mktemp -d)" >> $GITHUB_ENV
+
+      - name: Prepare variables
+        shell: bash -x {0}
+        run: |
+          export zmk_load_arg=" -DZMK_EXTRA_MODULES='${GITHUB_WORKSPACE}'"
+          new_tmp_dir="${TMPDIR:-/tmp}/zmk-config"
+          mkdir -p "${new_tmp_dir}"
+          echo "base_dir=${new_tmp_dir}" >> $GITHUB_ENV
+          cp -R config/* "${new_tmp_dir}/config/"
+          echo "extra_cmake_args=${shield:+-DSHIELD=\"$shield\"}${zmk_load_arg}" >> $GITHUB_ENV
+
+      - name: West Init
+        working-directory: ${{ env.base_dir }}
+        run: west init -l "${base_dir}/config"
+
+      - name: West Update
+        working-directory: ${{ env.base_dir }}
+        run: west update --fetch-opt=--filter=tree:0
+
+      - name: West Zephyr export
+        working-directory: ${{ env.base_dir }}
+        run: west zephyr-export
+
+      - name: West Build (capture log)
+        working-directory: ${{ env.base_dir }}
+        shell: sh -x {0}
+        run: |
+          set +e
+          west build -s zmk/app -d "${build_dir}" -b "${board}" -- -DZMK_CONFIG="${base_dir}/config" ${extra_cmake_args} > "${build_dir}/build.log" 2>&1
+          exit_code=$?
+          echo "west build exit code: ${exit_code}"
+          cp "${build_dir}/zephyr/.config" "${build_dir}/" 2>/dev/null || true
+          cp "${build_dir}/zephyr/zephyr.dts.pre" "${build_dir}/" 2>/dev/null || true
+          exit ${exit_code}
+
+      - name: Upload diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: diag-build-log
+          path: ${{ env.build_dir }}
